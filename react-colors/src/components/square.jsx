@@ -21,15 +21,12 @@ const Square = ({ color }) => {
       }}
       ref={squareRef}
       onClick={() => {
-        // console.log("select: " + reducer.selectedColor);
-        // console.log("curr: " + color);
         if (reducer.selectedColor === color) {
           dispatch({
             type: ActionTypes.GAME_END,
             payload: true,
           });
         } else {
-          // console.log(squareRef.current);
           if (reducer.isFinished) return;
           squareRef.current.style.backgroundColor = "#232323";
         }

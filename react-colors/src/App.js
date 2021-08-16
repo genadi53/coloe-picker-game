@@ -16,28 +16,26 @@ const App = () => {
   const [reducer, dispatch] = useReducer(GameStateReducer, initialState);
   const [colors, setColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
+  const [trigger, setTrigger] = useState(false);
 
   const setUpGame = () => {
     const colorsArray = generateRandomColors(reducer.numberOfSquares);
-    // console.log(colorsArray);
     setColors(colorsArray);
     const color = colorsArray[random(colorsArray.length)];
-    console.log(color);
     setSelectedColor(color);
     dispatch({ type: ActionTypes.GAME_START });
     dispatch({ type: ActionTypes.SET_SELECTED_COLOR, payload: color });
   };
 
   useEffect(() => {
-    // console.log(reducer.numberOfSquares);
     setUpGame();
-  }, []);
+    setTrigger(false);
+  }, [trigger]);
 
-  // console.log(selectedColor);
   return (
     <div className="App">
       <GameStateContext.Provider value={{ reducer, dispatch }}>
-        <Header></Header>
+        <Header trigger={setTrigger}></Header>
         <div className="container">
           {colors.map((color) => {
             return <Square key={color} color={color}></Square>;

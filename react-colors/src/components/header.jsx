@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { GameStateContext } from "../utils/Context";
 import { ActionTypes } from "../utils/gameStateReducer";
 
-const Header = ({}) => {
+const Header = ({ trigger }) => {
   const { reducer, dispatch } = useContext(GameStateContext);
   const titleColor = reducer.isFinished ? reducer.selectedColor : "steelblue";
 
@@ -29,6 +29,7 @@ const Header = ({}) => {
           id="reset"
           onClick={() => {
             dispatch({ type: ActionTypes.GAME_START });
+            trigger(true);
           }}
         >
           New Colors
@@ -39,7 +40,7 @@ const Header = ({}) => {
           className="mode"
           onClick={() => {
             dispatch({ type: ActionTypes.SET_MODE_EASY });
-            console.log(reducer);
+            trigger(true);
           }}
         >
           Easy
@@ -49,7 +50,7 @@ const Header = ({}) => {
           className="mode"
           onClick={() => {
             dispatch({ type: ActionTypes.SET_MODE_HARD });
-            console.log(reducer);
+            trigger(true);
           }}
         >
           Hard
