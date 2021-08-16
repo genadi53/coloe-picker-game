@@ -1,28 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { generateRandomColors, random } from "./utils/generateColors";
+import {
+  GameStateReducer,
+  initialState,
+  ActionTypes,
+} from "./utils/gameStateReducer";
+import { GameStateContext } from "./utils/Context";
+
 import Header from "./components/header";
 
 import "./App.css";
 import Square from "./components/square";
 
 const App = () => {
+  const [reducer, dispatch] = useReducer(GameStateReducer, initialState);
   const [colors, setColors] = useState([]);
-  const [numSquares, setNumSquares] = useState(6);
   const [selectedColor, setSelectedColor] = useState("");
 
+  const setUpGame = () => {
+    const colorsArray = generateRandomColors(reducer.numberOfSquares);
+    // console.log(colorsArray);
+    setColors(colorsArray);
+    const color = colorsArray[random(colorsArray.length)];
+    console.log(color);
+    setSelectedColor(color);
+    dispatch({ type: ActionTypes.GAME_START });
+    dispatch({ type: ActionTypes.SET_SELECTED_COLOR, payload: color });
+  };
+
   useEffect(() => {
-    setColors(generateRandomColors(numSquares));
-    setSelectedColor(colors[random(colors.length)]);
+    // console.log(reducer.numberOfSquares);
+    setUpGame();
   }, []);
 
+  // console.log(selectedColor);
   return (
     <div className="App">
-      <Header></Header>
-      <div className="container">
-        {colors.map((color) => {
-          return <Square key={color} color={color}></Square>;
-        })}
-      </div>
+      <GameStateContext.Provider value={{ reducer, dispatch }}>
+        <Header></Header>
+        <div className="container">
+          {colors.map((color) => {
+            return <Square key={color} color={color}></Square>;
+          })}
+        </div>
+      </GameStateContext.Provider>
     </div>
   );
 };
